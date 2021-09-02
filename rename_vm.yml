@@ -1,5 +1,5 @@
 ---
-  -name: Run generate-mapping on Riyadh
+  - name: Run generate-mapping on Riyadh
   hosts: all
   
   tasks:
