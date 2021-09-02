@@ -37,27 +37,3 @@
       destination_datastore: '{{datastore}}'
 
 
-
----
-  - name: Rename virtual machine from old name to new name using UUID
-    gather_facts: no
-    hosts: all
-    
-    tasks:
-    - name: Rename VM to New VM name
-      community.vmware.vmware_object_rename:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        new_name: '{{ new_vm_name }}'
-        object_name: '{{ vm_name }}'
-        object_type: VirtualMachine
-
-    - name: Perform storage vMotion of of virtual machine to DS to rename disk
-      vmware_vmotion:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: no
-        vm_name: '{{ new_vm_name }}'
-        destination_datastore: '{{ datastore }}'
