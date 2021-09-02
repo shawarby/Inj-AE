@@ -3,8 +3,8 @@
     gather_facts: no
     hosts: all
     tasks:
-    - name: Rename "{{ old_vm_name }}" to "{{ new_vm_name }}"
-      community.vmware.plugins.modules.vmware_object_rename:
+    - name: Rename VM to New VM name
+      community.vmware.vmware_object_rename:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
