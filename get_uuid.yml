@@ -3,12 +3,12 @@
   - name: Getting VMWARE UUID
     vmware_guest_info:
       validate_certs: no
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ Password }}"
-      password:  "{{ pass }}"
+      hostname: 192.168.0.249
+      username: administrator@vsphere.local
+      password:  P@ssw0rd
       validate_certs: no
-      datacenter: "{{ datacenter_name }}"
-      name: "{{ VM_Name }}"
+      datacenter: datacenter
+      name: testvm
       schema: "vsphere"
       properties:
     register: vminfo
