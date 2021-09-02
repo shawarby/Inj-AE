@@ -7,7 +7,7 @@
     
     tasks:
     - name: Rename VM to New VM name
-      community.vmware.plugins.modules.vmware_object_rename:
+      community.vmware.vmware_object_rename:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
