@@ -13,9 +13,6 @@
       properties:
     register: vminfo
     delegate_to: localhost
-  - debug:
-      var: vminfo.instance.config.uuid
-    register: vm_uuid
   - name: Rename virtual machine from old name to new name
     vmware_guest:
       hostname: 192.168.0.249
@@ -23,5 +20,5 @@
       password:  P@ssw0rd
       validate_certs: False
       cluster: ClusterA
-      uuid: "{{ vm_uuid }}"
+      uuid: vminfo.instance.config.uuid
       name: ttttt
