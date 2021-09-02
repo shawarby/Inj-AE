@@ -1,21 +1,17 @@
----
-  - name: Getting VMWARE UUID
-  hosts: localhost
-  gather_facts: false
-  connection: local
+- hosts: all
   tasks:
-  - name: Get Virtual Machine info
+  - name: Getting VMWARE UUID
     vmware_guest_info:
-      validate_certs: no
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ Password }}"
-      password:  "{{ pass }}"
-      validate_certs: no
-      datacenter: "{{ datacenter_name }}"
-      name: "{{ VM_Name }}"
-      schema: "vsphere"
-      properties:
-    delegate_to: localhost
-    register: vminfo
+    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ Password }}"
+    password:  "{{ pass }}"
+    validate_certs: no
+    datacenter: "{{ datacenter_name }}"
+    name: "{{ VM_Name }}"
+    schema: "vsphere"
+    properties:
+  delegate_to: localhost
+  register: vminfo
   - debug:
       var: vminfo.instance.config.uuid
