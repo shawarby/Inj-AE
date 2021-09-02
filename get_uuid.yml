@@ -2,16 +2,15 @@
   tasks:
   - name: Getting VMWARE UUID
     vmware_guest_info:
-    validate_certs: no
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ Password }}"
-    password:  "{{ pass }}"
-    validate_certs: no
-    datacenter: "{{ datacenter_name }}"
-    name: "{{ VM_Name }}"
-    schema: "vsphere"
-    properties:
-  delegate_to: localhost
-  register: vminfo
+      validate_certs: no
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ Password }}"
+      password:  "{{ pass }}"
+      validate_certs: no
+      datacenter: "{{ datacenter_name }}"
+      name: "{{ VM_Name }}"
+      schema: "vsphere"
+      properties:
+    register: vminfo
   - debug:
       var: vminfo.instance.config.uuid
