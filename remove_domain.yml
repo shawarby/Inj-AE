@@ -1,0 +1,8 @@
+- hosts: all
+  tasks:
+  - win_domain_membership:
+      workgroup_name: tempwkg
+      domain_admin_user: "{{lookup('env','WINDOWS_USER')}}"
+      domain_admin_password: "{{ lookup('env','WINDOWS_PASSWORD')}}"
+      state: workgroup
+

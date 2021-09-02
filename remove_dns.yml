@@ -1,0 +1,5 @@
+- hosts: windows_dns
+  tasks:
+  - name: remove dns entry
+    win_shell: |
+      Remove-DnsServerResourceRecord -ZoneName "{{domain}}" -RRType "A" -Name "{{hostname_short}}" -Force

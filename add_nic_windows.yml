@@ -1,0 +1,32 @@
+- hosts: all
+  vars:
+    ip_mask: "{{ip_addr}}/{{subnet_mask}}"
+    list_dns_servers: "{{dns_servers.split(',')}}"
+  tasks:
+  - name: get interface
+    win_shell: |
+      function Get-MACAddress {
+          param ($MacAddress)
+
+          $colItems = Get-NetAdapter
+
+          foreach ($objItem in $colItems) {
+
+              if($objItem.MacAddress -eq $MacAddress){
+              $objItem.Name
+              }
+          }
+      }
+      Get-MacAddress("{{mac_address|replace(":", "-")}}")
+    register: interface
+
+  - name: set ip settings
+    win_shell: |
+      New-NetIPAddress -InterfaceAlias "{{interface.stdout | trim}}" -IPAddress "{{ip_addr}}" -PrefixLength {{ ip_mask| ipaddr('prefix') }} -DefaultGateway {{gateway}}
+      Disable-NetAdapterBinding -InterfaceAlias "{{interface.stdout | trim}}" -ComponentID ms_tcpip6
+    register: "config_interface"
+
+  - name: set DNS settings
+    win_shell: |
+      Set-DnsClientServerAddress -InterfaceAlias "{{interface.stdout | trim}}" -ServerAddresses  ("{{list_dns_servers.0}}", "{{list_dns_servers.1}}")
+

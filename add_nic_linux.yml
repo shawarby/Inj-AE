@@ -1,0 +1,16 @@
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+  - name: get interface
+    shell: "ip a | grep {{mac_address}} -C 1 | awk '{print $2}' | cut -d: -f1 | head -n1"
+    register: interface
+  - name: set interface settings in ifcfg file
+    template:
+      src: "templates/ifcfg.j2"
+      dest: "/etc/sysconfig/network-scripts/ifcfg-{{ interface.stdout | trim}}"
+    register: "config_interface"
+  - name: restarting network interface
+    shell: bash -c "ifdown {{ interface.stdout | trim}} && ifup {{ interface.stdout | trim }}"
+    ignore_errors: yes
+

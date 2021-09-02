@@ -1,0 +1,25 @@
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: get interface
+    shell: "ip a | grep {{mac_address}} -C 1 | awk '{print $2}' | cut -d: -f1 | head -n1"
+    register: interface
+
+  - name: set interface settings in ifcfg file
+    template:
+      src: "templates/ifcfg-suse.j2"
+      dest: "/etc/sysconfig/network/ifcfg-{{ interface.stdout | trim}}"
+
+
+# CAnnot have more than 1 default route in SUSE
+#  - name: add gateway
+#    lineinfile:
+#      dest: "/etc/sysconfig/network/routes"
+#      insertafter: EOF
+#      line: "default {{gateway}} - {{ interface.stdout | trim}}"
+#      create: yes
+
+  - name: restarting network interface
+    shell: bash -c "ifdown {{ interface.stdout | trim}} && ifup {{ interface.stdout | trim }}"
+

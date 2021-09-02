@@ -1,0 +1,4 @@
+hosts: all
+tasks:
+- name: remove client from IDM
+  shell: "ipa-client-install --uninstall client_machine_fqdn"

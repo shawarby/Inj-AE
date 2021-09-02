@@ -1,0 +1,71 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: change root password
+    shell: "echo '{{root_password}}' | passwd --stdin root"
+  - name: add NTP servers
+    template:
+      src: "templates/chrony.conf.j2"
+      dest: /etc/chrony.conf
+  - name: restart chrony
+    shell: systemctl restart chronyd
+  - name: get mgmt device name
+    shell: |
+      ip addr | awk '
+      /^[0-9]+:/ {
+      sub(/:/,"",$2); iface=$2 }
+      /^[[:space:]]*inet / {
+      split($2, a, "/")
+      print iface" : "a[1]
+      }' | grep {{mgmt_ip}} | awk '{print $1}'
+    register: mgmt_interface_name
+  - name: get mgmt gw
+    shell: "ip route | grep default|grep {{mgmt_interface_name.stdout|trim}} | awk '{print $3}'"
+    register: mgmt_gw
+  - name: create static route file
+    shell: |
+      nmcli connection modify {{mgmt_interface_name.stdout}}  ipv4.routes "10.216.0.0/16 {{mgmt_gw.stdout|trim}}"
+      nmcli connection modify {{mgmt_interface_name.stdout}} +ipv4.routes "10.217.0.0/16 {{mgmt_gw.stdout|trim}}"
+  - name: remove mgmt default GW
+    lineinfile:
+      state: absent
+      path: "/etc/sysconfig/network-scripts/ifcfg-{{mgmt_interface_name.stdout}}"
+      regexp: "^GATEWAY"
+
+  - name: check if network file exists
+    stat: 
+      path: /etc/sysconfig/network
+    register: network_config
+
+  - name: remove GW
+    lineinfile: 
+      dest: /etc/sysconfig/network
+      state: absent
+      regexp: "^{{item}}" 
+    when: network_config.stat.exists == true
+    with_items:
+    - GATEWAY
+    - GATEWAYDEV
+
+  - name: get traffic device name
+    shell: |
+      ls /sys/class/net | grep -v lo | grep -v {{mgmt_interface_name.stdout}} | head -n 1
+    register: traffic_interface_name
+
+  - name: ad default GW
+    lineinfile:
+      dest: /etc/sysconfig/network
+      insertafter: EOF
+      line: "GATEWAYDEV={{traffic_interface_name.stdout}}"
+    when: network_config.stat.exists == true
+
+
+  - name: restart network
+    ignore_errors: yes
+    shell: systemctl restart NetworkManager
+
+  - name: reboot
+    shell: sleep 10 && reboot now
+    async: 10
+    poll: 0
+

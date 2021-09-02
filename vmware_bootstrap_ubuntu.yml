@@ -1,0 +1,30 @@
+- hosts: all
+  vars:
+    netplan_path: /etc/netplan/99-netcfg-vmware.yaml
+  tasks:
+  - name: change root password
+    shell: "usermod -p $(echo '{{ root_password }}' | openssl passwd -1 -stdin) root"
+
+  - name: get mgmt device name
+    shell: "ip -o a | grep {{mgmt_ip}} | awk '{print $2}'"
+    register: mgmt_interface
+
+  - name: set timezone
+    shell: timedatectl set-timezone Asia/Dubai
+
+  - name: drop python file
+    template:
+      src: load_netplan.py.j2
+      dest: load_netplan.py
+
+  - name: exec python
+    shell: python load_netplan.py
+
+  - name: remove python file
+    shell: rm -rf load_netplan.py
+  - name: remove rc.local
+    shell: rm -rf /etc/rc.local
+  - name: reboot
+    shell: sleep 10 && /sbin/shutdown now -r
+    async: 10
+    poll: 0

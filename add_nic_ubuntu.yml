@@ -1,0 +1,25 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: get interface
+    shell: "ip a | grep {{mac_address}} -C 1 | awk '{print $2}' | cut -d: -f1 | head -n1"
+    register: interface
+
+  - name: set interface fact
+    set_fact:
+      new_interface: "{{ interface.stdout | trim}}"
+
+  - name: drop python file
+    template:
+      src: netplan_ubuntu_add.py.j2
+      dest: netplan_ubuntu_add.py
+
+  - name: exec python
+    shell: /usr/bin/python3 netplan_ubuntu_add.py
+
+  - name: remove python file
+    shell: rm -rf netplan_ubuntu_add.py
+
+  - name: netplan apply
+    shell: netplan apply
+

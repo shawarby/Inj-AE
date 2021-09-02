@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: Create DRS Affinity Rule for VMs
+    vmware_vm_vm_drs_rule:
+      hostname: "{{ lookup('env','VCENTER_HOSTNAME') }}"
+      username: "{{ lookup('env','VCENTER_USER') }}"
+      password: "{{ lookup('env','VCENTER_PASSWORD') }}"
+      cluster_name: "{{ cluster_name }}"
+      validate_certs: no
+      vms: "{{ vms }}"
+      drs_rule_name: "{{ rule_name }}-affinity-rule"
+      enabled: True
+      mandatory: True
+      affinity_rule: False
+

@@ -1,0 +1,25 @@
+- hosts: all
+  gather_facts: no
+  vars:
+    satellite_host: 10.216.47.11
+    activation_key: rhel
+    organization: Injazat-Data-Systems-LLC
+  tasks:
+  - name: install katello CA file from satellite
+    yum:
+      name: "https://{{satellite_host}}/pub/katello-ca-consumer-latest.noarch.rpm"
+      validate_certs: no
+
+  - name: register to stallite only for content
+    redhat_subscription:
+      state: present
+      activationkey: "{{ activation_key }}"
+      org_id: "{{ organization }}"
+
+  - name: check repo list
+    shell: yum repolist
+
+  - name: Update the host to latest errata within the attached content view
+    yum:
+      name: '*'
+      state: latest

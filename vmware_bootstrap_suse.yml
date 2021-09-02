@@ -1,0 +1,70 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: change root password
+    shell: usermod -p $(echo "{{root_password}}" | openssl passwd -1 -stdin) root
+
+  - name: add NTP servers
+    template:
+      src: "templates/chrony.conf.j2"
+      dest: /etc/chrony.conf
+
+  - name: restart ntpd
+    service:
+      name: chronyd
+      state: restarted
+
+  - name: get mgmt device name
+    shell: |
+      ip addr | awk '
+      /^[0-9]+:/ {
+      sub(/:/,"",$2); iface=$2 }
+      /^[[:space:]]*inet / {
+      split($2, a, "/")
+      print iface" : "a[1]
+      }' | grep {{mgmt_ip}} | awk '{print $1}'
+    register: mgmt_interface_name
+
+  - name: create static route file
+    shell: |
+      echo '10.216.0.0/16 {{mgmt_gw}}  - -' >/etc/sysconfig/network/ifroute-{{mgmt_interface_name.stdout}}
+      echo '10.217.0.0/16 {{mgmt_gw}}  - -' >> /etc/sysconfig/network/ifroute-{{mgmt_interface_name.stdout}}
+
+
+  - name: get traffic device name
+    shell: |
+      ls /sys/class/net | grep -v lo | grep -v {{mgmt_interface_name.stdout}} | head -n 1
+    register: traffic_interface_name
+
+  - name: get traffic IP
+    shell: |
+      cat /etc/sysconfig/network/ifcfg-{{traffic_interface_name.stdout}} | grep IPADDR |sed 's/IPADDR=//g'
+    register: traffic_ip
+
+
+  - name: get traffic mask
+    shell: |
+      cat /etc/sysconfig/network/ifcfg-{{traffic_interface_name.stdout}} | grep NETMASK |sed 's/NETMASK=//g'
+    register: traffic_mask
+
+  - name: set traffic cidr
+    set_fact:
+      traffic_cidr: "{{traffic_ip.stdout}}/{{traffic_mask.stdout}}"
+
+  - name: show cidr
+    debug:
+      msg: "{{traffic_cidr}}"
+  - name: set traffic GW
+    shell: |
+      echo "default {{traffic_cidr | ipaddr('1') | ipaddr('address') }} - -" > /etc/sysconfig/network/routes
+
+  - name: add DNS
+    shell: |
+      sed -i -e 's/^NETCONFIG_DNS_STATIC_SEARCHLIST.*$/NETCONFIG_DNS_STATIC_SEARCHLIST="incloudmgmt.com"/g' /etc/sysconfig/network/config
+      sed -i -e 's/^NETCONFIG_DNS_STATIC_SERVERS.*$/NETCONFIG_DNS_STATIC_SERVERS="{{ mgmt_servers | join (' ')}}"/g' /etc/sysconfig/network/config
+      netconfig update -f
+  - name: reboot
+    shell: sleep 10 && reboot now
+    async: 10
+    poll: 0
+

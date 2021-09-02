@@ -1,0 +1,17 @@
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Remove disks from virtual machine using name
+    community.vmware.vmware_guest_disk:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+      name: VM_225
+      disk:
+        - state: absent
+          scsi_controller: 1
+          unit_number: 1
+    delegate_to: localhost
+    register: disk_facts

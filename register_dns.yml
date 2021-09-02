@@ -1,0 +1,6 @@
+- hosts: windows_dns
+  tasks:
+  - name: add dns entry
+    win_shell: |
+      Add-DnsServerResourceRecordA -Name "{{hostname_short}}" -ZoneName "{{domain}}" -AllowUpdateAny -IPv4Address "{{  ips }}" -TimeToLive 01:00:00
+

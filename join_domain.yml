@@ -1,0 +1,9 @@
+- hosts: all
+  tasks:
+  - win_domain_membership:
+    dns_domain_name: "{{ dns_domain_name }}"
+    hostname: "{{ ansible_hostname }}"
+    domain_admin_user: "{{lookup('env','WINDOWS_USER')}}"
+    domain_admin_password: "{{ lookup('env','WINDOWS_PASSWORD')}}"
+    domain_ou_path: "OU=Windows,OU=Servers,DC=incloudtnt,DC=com"
+    state: domain

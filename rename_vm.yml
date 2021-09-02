@@ -1,0 +1,24 @@
+- name: Rename virtual machine from old name to new name using UUID
+  gather_facts: no
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Rename "{{ old_vm_name }}" to "{{ new_vm_name }}"
+    vmware_guest:
+      hostname: "{{ lookup('env','VCENTER_HOSTNAME') }}"
+      username: "{{ lookup('env','VCENTER_USER') }}"
+      password: "{{ lookup('env','VCENTER_PASSWORD') }}"
+      validate_certs: False
+      cluster: "{{ cluster_name }}"
+      uuid: "{{ vm_uuid }}"
+      name: "{{ new_vm_name }}"
+
+  - name: Perform storage vMotion of of virtual machine to DS to rename disk
+    vmware_vmotion:
+      hostname: "{{ lookup('env','VCENTER_HOSTNAME') }}"
+      username: "{{ lookup('env','VCENTER_USER') }}"
+      password: "{{ lookup('env','VCENTER_PASSWORD') }}"
+      validate_certs: no
+      vm_name: '{{new_vm_name}}'
+      destination_datastore: '{{datastore}}'
+

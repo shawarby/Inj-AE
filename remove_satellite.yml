@@ -1,0 +1,7 @@
+- hosts: all
+  tasks:
+  - name: unregister satellite
+    redhat_subscription:
+      state: absent
+  - name: clean old subscription-manager data
+    shell: /usr/bin/subscription-manager clean

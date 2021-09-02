@@ -1,0 +1,35 @@
+- hosts: all
+  tasks:
+  - name: set ntp
+    win_shell: |
+      w32tm /config /syncfromflags:manual /manualpeerlist:"ntp.incloudmgmt.com" /update
+      w32tm /config /reliable:yes
+      w32tm /config /update
+      net stop w32time
+      net start w32time
+
+  - name: set dns
+    ignore_errors: yes
+    win_shell: |
+      Set-DnsClientGlobalSetting -SuffixSearchList @("incloudmgmt.com")
+      $mgmt_interface = Get-NetIPAddress | ?{ $_.AddressFamily -eq "IPv4" -and ($_.IPAddress -match "{{mgmt_ip}}")}
+      Set-DnsClientServerAddress -InterfaceIndex $mgmt_interface.InterfaceIndex -ServerAddresses "{{mgmt_servers.0}},{{mgmt_servers.1}}"
+      $NICs = Get-WMIObject Win32_NetworkAdapterConfiguration |where{$_.InterfaceIndex -ine $mgmt_interface.InterfaceIndex -and $_.IPEnabled -eq "True"}
+      Foreach($NIC in $NICs) {
+        Set-DnsClientServerAddress -InterfaceIndex $NIC.InterfaceIndex -ServerAddresses "8.8.8.8,8.8.8.8"
+      }
+      foreach ($interface in Get-NetAdapter){$has_internet = "";$interface_index = $interface.InterfaceIndex  ;$ping_result = Test-NetConnection "www.google.com" -ConstrainInterface $interface_index -InformationLevel Quiet -DiagnoseRouting; foreach($result in $ping_result){if($result.SelectedNetRoute.DestinationPrefix){$has_internet=$interface_index}}}
+      if ($has_internet){Get-NetAdapter -physical | where InterfaceIndex -eq $has_internet | Set-NetIPInterface -InterfaceMetric 1}
+      $gw = Get-NetIPConfiguration -InterfaceIndex $mgmt_interface.InterfaceIndex | Foreach IPv4DefaultGateway
+      if ($mgmt_interface){route -p ADD 10.216.0.0 MASK 255.255.0.0 $gw.NextHop;route -p ADD 10.217.0.0 MASK 255.255.0.0 $gw.NextHop;}
+
+
+  - name: remove default route and reboot
+    win_shell: |
+      $mgmt_interface = Get-NetIPAddress | ?{ $_.AddressFamily -eq "IPv4" -and ($_.IPAddress -match "{{mgmt_ip}}")}
+      Remove-NetRoute -InterfaceIndex $mgmt_interface.InterfaceIndex -Confirm:$false;
+      Restart-Computer -Force
+    async: 15
+    poll: 0
+
+

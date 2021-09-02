@@ -1,0 +1,30 @@
+- hosts: all
+  vars:
+    ipa_admin_password: {{ lookup('env','IDM_PASSWORD') }}
+    hostname: "{{ansible_fqdn}}"
+    domain_name: {{ lookup('env','IDM_DOMAIN') }}
+    ipa_admin_user: {{ lookup('env','IDM_USERNAME') }}
+    realm_name: {{ lookup('env','IDM_REALM') }}
+  tasks:
+  - name: install freeipa and sssd
+    yum:
+      name: "{{item}}"
+      state: present
+    with_items:
+    - ipa-client
+    - sssd
+    - ntp
+
+  - name: start and enable ntpd
+    service:
+      name: ntpd
+      enabled: yes
+
+  - name: create home directory on login
+    lineinfile:
+      dest: "/etc/pam.d/sshd"
+      line: "session         required        pam_mkhomedir.so skel=/etc/skel/"
+
+  - name: join idm server
+    shell: ipa-client-install --domain={{domain_name}} --realm={{realm_name}} -p "{{ip_admin_user}}" --password={{ipa_admin_password}} --mkhomedir --hostname={{ansible_fqdn}} --unattended
+
