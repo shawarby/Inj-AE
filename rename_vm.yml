@@ -1,15 +1,16 @@
 ---
   -name: Run generate-mapping on Riyadh
   hosts: all
+  
   tasks:
   - name: Rename a virtual machine
-  community.vmware.vmware_object_rename:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    new_name: '{{ new_vm_name }}'
-    object_name: '{{ vm_name }}'
-    object_type: VirtualMachine
+    community.vmware.vmware_object_rename:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      new_name: '{{ new_vm_name }}'
+      object_name: '{{ vm_name }}'
+      object_type: VirtualMachine
 
   - name: Perform storage vMotion of of virtual machine to DS to rename disk
     vmware_vmotion:
