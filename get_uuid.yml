@@ -3,22 +3,30 @@
   - name: Getting VMWARE UUID
     vmware_guest_info:
       validate_certs: no
-      hostname: 192.168.0.249
-      username: administrator@vsphere.local
-      password:  P@ssw0rd
+      hostname: "{{VMWARE_HOST}}"
+      username: "{{VMWARE_USER}}"
+      password: "{{VMWARE_PASSWORD}}"
       validate_certs: no
       datacenter: datacenter
-      name: testvm
+      name: "{{vm_name}}"
       schema: "vsphere"
       properties:
     register: vminfo
     delegate_to: localhost
   - name: Rename virtual machine from old name to new name
     vmware_guest:
-      hostname: 192.168.0.249
-      username: administrator@vsphere.local
-      password:  P@ssw0rd
+      hostname: "{{VMWARE_HOST}}"
+      username: "{{VMWARE_USER}}"
+      password: "{{VMWARE_PASSWORD}}"
       validate_certs: False
       cluster: ClusterA
       uuid: "{{ vminfo.instance.config.uuid }}"
-      name: ttttt
+      name: "{{new_vm_name}}"
+  - name: Perform storage vMotion of of virtual machine to DS to rename disk
+    vmware_vmotion:
+      hostname: "{{VMWARE_HOST}}"
+      username: "{{VMWARE_USER}}"
+      password: "{{VMWARE_PASSWORD}}"
+      validate_certs: no
+      vm_name: "{{new_vm_name}}"
+      destination_datastore: '{{datastore}}'
