@@ -12,6 +12,6 @@
       schema: "vsphere"
       properties:
     register: vminfo
-    delegate: localhost
+    delegate_to: localhost
   - debug:
       var: vminfo.instance.config.uuid
