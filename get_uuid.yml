@@ -20,5 +20,5 @@
       password:  P@ssw0rd
       validate_certs: False
       cluster: ClusterA
-      uuid: "vminfo.instance.config.uuid"
+      uuid: {{ vminfo.instance.config.uuid }}
       name: ttttt
