@@ -1,4 +1,5 @@
-- name: Rename virtual machine from old name to new name
+---
+  - name: Rename virtual machine from old name to new name
   gather_facts: no
   hosts: localhost
   connection: local
