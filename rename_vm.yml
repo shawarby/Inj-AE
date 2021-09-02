@@ -2,8 +2,6 @@
   - name: Rename virtual machine from old name to new name using UUID
     gather_facts: no
     hosts: all
-    collections:
-    - name: community.vmware
     
     tasks:
     - name: Rename VM to New VM name
