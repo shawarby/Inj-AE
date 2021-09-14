@@ -5,10 +5,9 @@
     vars:
       region: Dubai
     tasks:
-      - name: Set name.
+      - name: Set name
         set_fact: region_id="1"
         when: region == "Abu_Dhabi"
-      - name: Set names.
         set_fact: region_id="2"
         when: region == "Dubai"
       - name: Debug
