@@ -3,7 +3,7 @@
     gather_facts: no
     connection: localhost
     vars:
-      region: Dubai
+      region: Abu_Dhabi
     tasks:
       - name: Set name
         set_fact: region_id="1"
