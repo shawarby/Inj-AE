@@ -1,0 +1,16 @@
+---
+  - hosts: localhost
+    gather_facts: no
+    connection: localhost
+    vars:
+      region: Abu_Dhabi
+    tasks:
+      - name: Set name.
+        set_fact: region_id="1"
+        when: region == "Abu_Dhabi"
+      - name: Set names.
+        set_fact: region_id="2"
+        when: region == "Dubai"
+      - name: Debug
+        debug:
+          msg: "{{ region_id }}"
