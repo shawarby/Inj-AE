@@ -25,3 +25,6 @@
             {{ tenants.list | map('combine', { "tenant_name": "{{ lookup('tenant') }}"}) }}
           tenant_id: |
             {{ tenants.list | map('combine', { "tenant_id": "{{ lookup('tenant') }}"}) }}
+      - debug:
+          msg: "{{ tenant_name }}"
+          msg: "{{ tenant_id }}"
