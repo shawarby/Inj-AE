@@ -7,31 +7,31 @@
         read_csv:
           path: regions.csv
           key: region
-        register: regions
+        register: regions_list
       - name: Set Facts
         set_fact:
-          region_name: '{{ regions.dict[region].region }}'
-          region_id: '{{ regions.dict[region].region_id }}'
+          region_name: '{{ regions_list.dict[region].region }}'
+          region_id: '{{ regions_list.dict[region].region_id }}'
 
       - name: Read Tenants and return ID
         read_csv:
           path: tenants.csv
           key: tenant_name
-        register: tenants
+        register: tenants_list
       - name: Set Facts
         set_fact:
-          tenant_name: '{{ tenants.dict[tenant].tenant_name }}'
-          tenant_id: '{{ tenants.dict[tenant].tenant_id }}'
+          tenant_name: '{{ tenants_list.dict[tenant].tenant_name }}'
+          tenant_id: '{{ tenants_list.dict[tenant].tenant_id }}'
 
       - name: Read Hypervisors and return ID
         read_csv:
           path: hypervisors.csv
           key: hypervisor
-        register: hypervisors
+        register: hypervisors_list
       - name: Set Facts
         set_fact:
-          hypervisor_name: '{{ hypervisors.dict[hypervisor].hypervisor }}'
-          hypervisor_id: '{{ hypervisors.dict[hypervisor].hypervisor_id }}'
+          hypervisor_name: '{{ hypervisors_list.dict[hypervisor].hypervisor }}'
+          hypervisor_id: '{{ hypervisors_list.dict[hypervisor].hypervisor_id }}'
 
       - name: Read Environments and return ID
         read_csv:
@@ -47,41 +47,41 @@
         read_csv:
           path: pri_dr.csv
           key: pri_dr
-        register: pridr
+        register: pridr_list
       - name: Set Facts
         set_fact:
-          pri_dr: '{{ pridr.dict[pri_dr].pri_dr }}'
-          pri_dr_id: '{{ pridr.dict[pri_dr].id }}'
+          pri_dr: '{{ pridr_list.dict[pri_dr].pri_dr }}'
+          pri_dr_id: '{{ pridr_list.dict[pri_dr].id }}'
  
       - name: Read OS and return ID
         read_csv:
           path: os.csv
           key: os
-        register: oss
+        register: os_list
       - name: Set Facts
         set_fact:
-          os: '{{ os.dict[os].os }}'
-          os_id: '{{ os.dict[os].id }}'
+          os: '{{ os_list.dict[os].os }}'
+          os_id: '{{ os_list.dict[os].id }}'
 
       - name: Read APP and return ID
         read_csv:
           path: apps.csv
           key: app
-        register: apps
+        register: apps_list
       - name: Set Facts
         set_fact:
-          app_name: '{{ apps.dict[app].app }}'
-          app_id: '{{ apps.dict[app].id }}'
+          app_name: '{{ apps_list.dict[app].app }}'
+          app_id: '{{ apps_list.dict[app].id }}'
 
       - name: Read Node and return ID
         read_csv:
           path: nodes.csv
           key: node
-        register: nodes
+        register: nodes_list
       - name: Set Facts
         set_fact:
-          node_name: '{{ nodes.dict[node].node }}'
-          node_id: '{{ nodes.dict[node].id }}'
+          node_name: '{{ nodes_list.dict[node].node }}'
+          node_id: '{{ nodes_list.dict[node].id }}'
 
       - name: Set VM Name
         set_fact:
