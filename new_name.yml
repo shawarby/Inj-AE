@@ -3,15 +3,26 @@
     gather_facts: no
     connection: localhost
     tasks:
-      - name: Set Region
-        set_fact: region_id="1"
-        when: region == "Abu_Dhabi"
-      - name: Set Region
-        set_fact: region_id="2"
-        when: region == "Dubai"
-      - name: Set Region
-        set_fact: region_id="3"
-        when: region == "Old_Abu_Dhabi"
+      - name: Read Tenants from CSV file and return ID
+        read_csv:
+          path: regions.csv
+          key: region
+        register: regions
+        
+      - name: Set Facts
+        set_fact:
+          tenant_name: '{{ regions.dict[region].region }}'
+          tenant_id: '{{ regions.dict[region].region_id }}'
+      
+#      - name: Set Region
+#        set_fact: region_id="1"
+#        when: region == "Abu_Dhabi"
+#      - name: Set Region
+#        set_fact: region_id="2"
+#        when: region == "Dubai"
+#      - name: Set Region
+#        set_fact: region_id="3"
+#        when: region == "Old_Abu_Dhabi"
 
       - name: Read Tenants from CSV file and return ID
         read_csv:
@@ -23,6 +34,3 @@
         set_fact:
           tenant_name: '{{ tenants.dict[tenant].tenant_name }}'
           tenant_id: '{{ tenants.dict[tenant].tenant_id }}'
-      - debug:
-          msg: "{{ tenant_name }}"
-          msg: "{{ tenant_id }}"
