@@ -3,7 +3,7 @@
     gather_facts: no
     connection: localhost
     tasks:
-      - name: Read Regions from CSV file and return ID
+      - name: Read Regions and return ID
         read_csv:
           path: regions.csv
           key: region
@@ -13,9 +13,9 @@
           region_name: '{{ regions.dict[region].region }}'
           region_id: '{{ regions.dict[region].region_id }}'
 
-      - name: Read Tenants from CSV file and return ID
+      - name: Read Tenants and return ID
         read_csv:
-          path: tenant.csv
+          path: tenants.csv
           key: tenant_name
         register: tenants
       - name: Set Facts
@@ -23,6 +23,65 @@
           tenant_name: '{{ tenants.dict[tenant].tenant_name }}'
           tenant_id: '{{ tenants.dict[tenant].tenant_id }}'
 
+      - name: Read Hypervisors and return ID
+        read_csv:
+          path: hypervisors.csv
+          key: hypervisor
+        register: hypervisors
+      - name: Set Facts
+        set_fact:
+          hypervisor_name: '{{ hypervisors.dict[hypervisor].hypervisor }}'
+          hypervisor_id: '{{ hypervisors.dict[hypervisor].hypervisor_id }}'
+
+      - name: Read Environments and return ID
+        read_csv:
+          path: environments.csv
+          key: environment
+        register: environments
+      - name: Set Facts
+        set_fact:
+          environment_name: '{{ environments.dict[environment].environment }}'
+          environment_id: '{{ environments.dict[environment].environment_id }}'
+ 
+      - name: Read PRI/DR and return ID
+        read_csv:
+          path: pri_dr.csv
+          key: pri_dr
+        register: pridr
+      - name: Set Facts
+        set_fact:
+          pri_dr: '{{ pridr.dict[pri_dr].pri_dr }}'
+          pri_dr_id: '{{ pridr.dict[pri_dr].id }}'
+ 
+      - name: Read OS and return ID
+        read_csv:
+          path: os.csv
+          key: os
+        register: oss
+      - name: Set Facts
+        set_fact:
+          os: '{{ os.dict[os].os }}'
+          os_id: '{{ os.dict[os].id }}'
+
+      - name: Read APP and return ID
+        read_csv:
+          path: apps.csv
+          key: app
+        register: apps
+      - name: Set Facts
+        set_fact:
+          app_name: '{{ apps.dict[app].app }}'
+          app_id: '{{ apps.dict[app].id }}'
+
+      - name: Read Node and return ID
+        read_csv:
+          path: nodes.csv
+          key: node
+        register: nodes
+      - name: Set Facts
+        set_fact:
+          node_name: '{{ nodes.dict[node].node }}'
+         node_id: '{{ nodes.dict[node].id }}'
 
       - name: Set VM Name
         set_fact:
