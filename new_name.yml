@@ -18,6 +18,8 @@
           path: tenant.csv
           key: tenant_name
         register: tenants
+        
+      - name: Set Facts
         set_fact:
           tenant_name: "{{ tenants.dict.'{{ tenant }}'.tenant_name }}"
           tenant_id: "{{ tenants.dict.'{{ tenant }}'.tenant_id }}"
