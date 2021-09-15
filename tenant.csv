@@ -1,0 +1,13 @@
+tenant,tenant_id
+Cloud_Core_Infrastructure,001
+Cloud_Core_Management_Infrastructure,002
+Reserved003,003
+Reserved004,004
+IDC_SaaS_Services_hosted_in_InCloud_Non-Security,005
+IDC_SaaS_Services_hosted_in_InCloud_Security,006
+Web_Services_hosting_Tenant_environment,007
+Dirt_Cheap_Services_tenant_enviornment,008
+MVDC_equivalent_Tenant_Environment,009
+Client_Injazat_Tenant,010
+MIC_Tenant,011
+GSOC_Tenant,012
