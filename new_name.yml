@@ -35,13 +35,13 @@
 
       - name: Read Environments and return ID
         read_csv:
-          path: environments.csv
-          key: environment
-        register: environments
+          path: envs.csv
+          key: env
+        register: envs
       - name: Set Facts
         set_fact:
-          environment_name: '{{ environments.dict[environment].environment }}'
-          environment_id: '{{ environments.dict[environment].environment_id }}'
+          envs_name: '{{ envs.dict[envs].env }}'
+          envs_id: '{{ envs.dict[envs].env_id }}'
  
       - name: Read PRI/DR and return ID
         read_csv:
@@ -85,4 +85,4 @@
 
       - name: Set VM Name
         set_fact:
-          vm_name: "{{ region_id }}{{ tenant_id }}{{ hypervisor_id }}{{ environment_id }}{{ pri_dr_id }}{{ os_id }}{{ app_id }}{{ node_id }}"
+          vm_name: "{{ region_id }}{{ tenant_id }}{{ hypervisor_id }}{{ envs_id }}{{ pri_dr_id }}{{ os_id }}{{ app_id }}{{ node_id }}"
