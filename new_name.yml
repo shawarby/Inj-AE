@@ -37,11 +37,11 @@
         read_csv:
           path: envs.csv
           key: env
-        register: envs
+        register: env_list
       - name: Set Facts
         set_fact:
-          envs_name: '{{ envs.dict[envs].env }}'
-          envs_id: '{{ envs.dict[envs].env_id }}'
+          envs_name: '{{ env_list.dict[envs].env }}'
+          envs_id: '{{ env_list.dict[envs].env_id }}'
  
       - name: Read PRI/DR and return ID
         read_csv:
