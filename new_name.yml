@@ -1,0 +1,23 @@
+---
+  - hosts: localhost
+    gather_facts: no
+    connection: localhost
+    tasks:
+      - name: Set Region
+        set_fact: region_id="1"
+        when: region == "Abu_Dhabi"
+      - name: Set Region
+        set_fact: region_id="2"
+        when: region == "Dubai"
+      - name: Set Region
+        set_fact: region_id="3"
+        when: region == "Old_Abu_Dhabi"
+
+      - name: Read Tenants from CSV file and return ID
+        community.general.read_csv:
+          path: tenant.csv
+          key: tenant_name
+        register: tenants
+        set_fact:
+          tenant_name: "{{ tenants.dict.'{{ tenant }}'.tenant_name }}"
+          tenant_id: "{{ tenants.dict.'{{ tenant }}'.tenant_id }}"
