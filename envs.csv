@@ -1,4 +1,4 @@
-environment,environment_id
+env,env_id
 Production,1
 Pre-Production,2
 Test,3
