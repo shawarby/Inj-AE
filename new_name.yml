@@ -85,4 +85,4 @@
 
       - name: Set VM Name
         set_fact:
-          vm_name: "{{ region_id }}{{ tenant_id }}"
+          vm_name: "{{ region_id }}{{ tenant_id }}{{ hypervisor_id }}{{ environment_id }}{{ pri_dr_id }}{{ os_id }}{{ app_id }}{{ node_id }}"
