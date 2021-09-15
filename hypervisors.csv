@@ -1,0 +1,11 @@
+hypervisor,hypervisor_id
+ESX_Hypervisor,A
+KVM_OpenStack_Hypervisor,B
+KVM_RHEL,C
+Microsoft_Hyper-V,D
+Arcopolis,E
+Xen,F
+OVM,G
+Docker,H
+Kubernetes_Container,I
+Reserved,J
