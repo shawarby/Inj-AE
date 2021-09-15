@@ -21,10 +21,8 @@
         
       - name: Set Facts
         set_fact:
-          tenant_name: |
-            {{ tenants.list | map('combine', { "tenant_name": "{{ lookup('tenant') }}"}) }}
-          tenant_id: |
-            {{ tenants.list | map('combine', { "tenant_id": "{{ lookup('tenant') }}"}) }}
+          tenant_name: '{{ tenants.dict[tenant].tenant_name }}'
+          tenant_id: '{{ tenants.dict[tenant].tenant_id }}'
       - debug:
           msg: "{{ tenant_name }}"
           msg: "{{ tenant_id }}"
