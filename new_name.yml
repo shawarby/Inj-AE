@@ -2,8 +2,8 @@
   - hosts: localhost
     gather_facts: no
     connection: localhost
-#    collections:
-#    - name: community.general
+    collections:
+    - name: community.general
     tasks:
       - name: Set Region
         set_fact: region_id="1"
