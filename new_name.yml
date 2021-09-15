@@ -81,7 +81,7 @@
       - name: Set Facts
         set_fact:
           node_name: '{{ nodes.dict[node].node }}'
-         node_id: '{{ nodes.dict[node].id }}'
+          node_id: '{{ nodes.dict[node].id }}'
 
       - name: Set VM Name
         set_fact:
