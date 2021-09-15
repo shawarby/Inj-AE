@@ -1,4 +1,4 @@
-tenant,tenant_id
+tenant_name,tenant_id
 Cloud_Core_Infrastructure,001
 Cloud_Core_Management_Infrastructure,002
 Reserved003,003
