@@ -12,6 +12,26 @@
       - name: Set Region
         set_fact: region_id="3"
         when: region == "Old_Abu_Dhabi"
+
+      - name: Set Tenant
+        set_fact: tenant_id="001"
+        when: tenant == "Abu_Dhabi"
+      - name: Set tenant
+        set_fact: tenant_id="002"
+        when: tenant == "Dubai"
+      - name: Set tenant
+        set_fact: tenant_id="003"
+        when: tenant == "Old_Abu_Dhabi"
+      - name: Set tenant
+        set_fact: tenant_id="00"
+        when: tenant == "Old_Abu_Dhabi"
+      - name: Set tenant
+        set_fact: tenant_id="3"
+        when: tenant == "Old_Abu_Dhabi"
+      - name: Set tenant
+        set_fact: tenant_id="3"
+        when: tenant == "Old_Abu_Dhabi"
       - name: Debug
         debug:
-          msg: "{{ region_id }}"
+          msg: "{{ tenant_id }}"
+
