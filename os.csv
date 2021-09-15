@@ -1,0 +1,6 @@
+os,id
+Windows_Server_2012_R2,01
+Windows_Server_2016,02
+RHEL_7.6,03
+RHEL_7.4,04
+vCenter_OS_6.5(Photon),05
