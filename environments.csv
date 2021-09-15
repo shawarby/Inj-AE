@@ -1,0 +1,7 @@
+environment,environment_id
+Production,1
+Pre-Production,2
+Test,3
+Development,4
+Shared services,6
+Reserved,5
