@@ -21,5 +21,5 @@
         
       - name: Set Facts
         set_fact:
-          tenant_name: "{{ tenants[ tenant ].tenant_name }}"
-          tenant_id: "{{ tenants[tenant].tenant_id }}"
+          tenant_name: "{{ tenants.dict.[tenant].tenant_name }}"
+          tenant_id: "{{ tenants.dict.[tenant].tenant_id }}"
