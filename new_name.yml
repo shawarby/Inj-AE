@@ -14,7 +14,7 @@
         when: region == "Old_Abu_Dhabi"
 
       - name: Read Tenants from CSV file and return ID
-        community.general.read_csv:
+        read_csv:
           path: tenant.csv
           key: tenant_name
         register: tenants
