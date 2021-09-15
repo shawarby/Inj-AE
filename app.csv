@@ -1,0 +1,12 @@
+app,id
+Active_Directory,01
+DHCP,02
+Radius,03
+WSUS,04
+Root_CA,05
+Subordinate_CA,06
+Exchange,07
+Satellite,08
+IDM,09
+vCenter,10
+OpenSource_IP,11
