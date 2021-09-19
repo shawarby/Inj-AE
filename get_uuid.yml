@@ -1,4 +1,5 @@
 - hosts: all
+  gather_facts: yes
   tasks:
   - name: Getting VMWARE UUID
     vmware_guest_info:
