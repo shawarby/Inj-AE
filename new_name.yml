@@ -86,5 +86,5 @@
       - name: Set VM Name
         set_stats:
           data:
-            new_vm_name: "{{ region_id }}{{ tenant_id }}{{ hypervisor_id }}{{ envs_id }}{{ pri_dr_id }}{{ os_id }}{{ app_id }}{{ node_id }}"
+            new_vm_name: "{{ region_id }}{{ tenant_id }}{{ hypervisor_id }}{{ envs_id }}{{ pri_dr_id }}{{ os_id }}{{ app_id }}{{ node_id }}{{ item }}"
         with_sequence: count=3 
